@@ -11,9 +11,15 @@ const printToDom = (domString, divId) => {
   document.getElementById(divId).innerHTML = domString;
 };
 
+const maleOrFemaleBorderColor = () => {
+
+};
+
 const buildDomString = (input) => {
   let output = "";
   for (let i = 0; i < input.length; i++) {
+    let borderColor = "";
+    input[i].gender === 'Female' ? borderColor = 'pink-border' : borderColor = 'blue-border';
     output += `
               <div class="col-sm-3">
                 <div class="panel">
@@ -21,7 +27,7 @@ const buildDomString = (input) => {
                     <h3 class="panel-title">${input[i].name}</h3>
                   </div>
                   <div class="panel-body">
-                    <img class="charImage" src="${input[i].image}">
+                    <img class="charImage ${borderColor}" src="${input[i].image}">
                     <p class="charDescription">${input[i].description}</p>
                   </div>
                 </div>
