@@ -12,10 +12,20 @@ const printToDom = (domString, divId) => {
 };
 
 const buildDomString = (input) => {
-  console.log(input);
   let output = "";
   for (let i = 0; i < input.length; i++) {
-    output += `${input[i].name}`;
+    output += `
+              <div class="col-sm-3">
+                <div class="panel">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">${input[i].name}</h3>
+                  </div>
+                  <div class="panel-body">
+                    <img class="charImage" src="${input[i].image}">
+                    <p class="charDescription">${input[i].description}</p>
+                  </div>
+                </div>
+              </div>`;
   }
   printToDom(output,"superheroes");
 };
@@ -35,11 +45,5 @@ const startApplication = () => {
   data.addEventListener('error', XHRFail);
   data.open("GET", "/db/superheroes.json");
   data.send();
-
-  // const myRequest = new XMLHttpRequest();
-  // myRequest.addEventListener("load", executeThisCodeAfterFileLoaded);
-  // myRequest.addEventListener("error", executeThisCodeIfXHRFails);
-  // myRequest.open("GET", "animals.json");
-  // myRequest.send();
 };
 startApplication();
