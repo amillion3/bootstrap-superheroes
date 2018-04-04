@@ -11,10 +11,6 @@ const printToDom = (domString, divId) => {
   document.getElementById(divId).innerHTML = domString;
 };
 
-const maleOrFemaleBorderColor = () => {
-
-};
-
 const buildDomString = (input) => {
   let output = "";
   for (let i = 0; i < input.length; i++) {
