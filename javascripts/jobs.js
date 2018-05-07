@@ -15,12 +15,6 @@ const buildDomString = (input) => {
   printToDom(output,"awesome-dropdown");
 };
 
-function XHRSuccess() {
-  const JSONData = JSON.parse(this.responseText);
-  buildDomString(JSONData.superheroes);
-  addheroSelectionEventListeners();
-};
-
 function XHRFail() {
   console.log("uh oh");
 };
@@ -48,6 +42,7 @@ const displaySuperHero = heroes => {
     }
   });
   printToDom(domString, "selected-hero");
+  getJobs(heroes);
 };
 
 function loadFileforSingleHero() {
@@ -68,6 +63,58 @@ const addheroSelectionEventListeners = () => {
   for (let i = 0; i < menuItems.length; i++) {
     menuItems[i].addEventListener('click', selectHero);
   }
+};
+
+const displayJobs = (heroes) => {
+  let domString = "";
+  heroes.forEach(hero => {
+    if (hero.id === selectedHero) {
+      hero.jobs.forEach((job) =>{
+        domString += `<div><h3>${job}</h3></div>`;
+      })
+    }
+  });
+  printToDom(domString, "jobs");
+
+}
+
+const megaSmash = (jobsArray, heroesArray) => {
+  heroesArray.forEach((hero) => {
+    hero.jobs = [];
+    hero.jobIds.forEach((jobId) =>{
+      jobsArray.forEach((job) => {
+        if(job.id === jobId){
+          hero.jobs.push(job.title);
+        }
+      })
+    })
+  })
+  return heroesArray;
+};
+
+const getJobs = (heroesArray) =>{
+  let jobsRequest = new XMLHttpRequest();
+  jobsRequest.addEventListener("load", jobsJSONConvert);
+  jobsRequest.addEventListener("error", XHRFail);
+  jobsRequest.open("GET", "../db/jobs.json");
+  jobsRequest.send();
+
+  function jobsJSONConvert() {
+    const jobsData = JSON.parse(this.responseText).jobs;
+    const completeHeroes = megaSmash(jobsData, heroesArray);
+    displayJobs(completeHeroes);
+  }
+}
+
+function loadFileforSingleHero() {
+  const data = JSON.parse(this.responseText);
+  displaySuperHero(data.superheroes);
+}
+
+function XHRSuccess() {
+  const JSONData = JSON.parse(this.responseText);
+  buildDomString(JSONData.superheroes);
+  addheroSelectionEventListeners();
 };
 
 const genericHeroRequest = (successFunction) => {
